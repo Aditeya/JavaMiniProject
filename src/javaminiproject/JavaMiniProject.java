@@ -34,7 +34,7 @@ public class JavaMiniProject extends Application {
         Label distanceLabel = new Label("Distance          (Miles)");
         Label fuelEfficiencyLabel = new Label("Fuel Efficiency (MPG)");
         Label fuelRBLabel = new Label("Fuel");
-        Label fuelCostLabel = new Label("Fuel Cost = ");
+        Label resultLabel = new Label("Result");
 
         TextField distanceTF = new TextField();
         TextField fuelEfficiencyTF = new TextField();
@@ -67,7 +67,7 @@ public class JavaMiniProject extends Application {
         root.add(fuelEfficiencyTF, 1, 1, 1, 1);
         root.add(radioButtons, 1, 2, 1, 1);
         root.add(new Separator(), 0, 3, 3, 1);
-        root.add(fuelCostLabel, 1, 4, 1, 1);
+        root.add(resultLabel, 0, 4, 1, 1);
         root.add(new Separator(), 0, 5, 3, 1);
         root.add(buttons, 0, 6, 3, 1);
 
