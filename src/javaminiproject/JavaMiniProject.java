@@ -1,5 +1,9 @@
 package javaminiproject;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -89,7 +93,7 @@ public class JavaMiniProject extends Application {
             resultLabel.setText("Result");
         });
 
-        calculate.setOnAction((event) -> {
+        calculate.setOnAction((ActionEvent event) -> {
             double distance = getValueFromTextField(distanceTF, "distance");
 
             if (distance == 0) {
@@ -109,8 +113,15 @@ public class JavaMiniProject extends Application {
                 return;
             }
 
-            double cost = (rate / (efficiency / 4.54609)) * distance;
+            BigDecimal distanceBD = new BigDecimal(distance);
+            BigDecimal efficiencyBD = new BigDecimal(efficiency);
+            BigDecimal efficiencyInMPL = efficiencyBD.divide(BigDecimal.valueOf(4.54609), 5, RoundingMode.HALF_UP);
+            BigDecimal rateBD = new BigDecimal(rate);
 
+            BigDecimal costBD = distanceBD.multiply(rateBD.divide(efficiencyInMPL, MathContext.DECIMAL32));
+
+            DecimalFormat twoDP = new DecimalFormat("#.##");
+            String cost = twoDP.format(costBD.doubleValue());
             resultLabel.setText("Result"
                     + "\nDistance = " + distance + " miles"
                     + "\nFuel Efficiency = " + efficiency + " MPG"
