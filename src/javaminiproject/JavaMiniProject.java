@@ -6,7 +6,6 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,7 +25,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- *
+ * Fuel Cost Calculator made with JavaFX.
+ * Uses fuel price, fuel efficiency and distance 
+ * to calculate cost.
+ * 
  * @author Aditeya Viju Govind
  */
 public class JavaMiniProject extends Application {
@@ -99,6 +101,7 @@ public class JavaMiniProject extends Application {
             result.setText("Result");
         });
 
+        // Calculation button functionality done with BigDecimal and DecimalFormat
         calculate.setOnAction((ActionEvent event) -> {
             double distance = getValueFromTextField(distanceTF, "distance");
 
@@ -138,10 +141,18 @@ public class JavaMiniProject extends Application {
         Scene scene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
 
         primaryStage.setTitle("Fuel Cost Calculator");
+        primaryStage.setResizable(false);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
+    /**
+     * This method is used to get which RadioButton has been selected and return the selected value.
+     * It will show an Alert if a RadioButton isn't selected.
+     * 
+     * @param toggleGroup the toggle group containing the RadioButtons
+     * @return returns a double as the fuel price or return 0 if a RadioButton isn't selected
+     */
     public static double getValueFromRadioButton(ToggleGroup toggleGroup) {
         double rate = 0;
 
@@ -166,6 +177,14 @@ public class JavaMiniProject extends Application {
         return rate;
     }
 
+     /**
+     * This method is used to get the double value input from a TextField. It displays
+     * an Alert if a double value is not entered.
+     * 
+     * @param textField TextField to get the double value
+     * @param name name of the TextField for the Alert
+     * @return returns a double value acquired from the TextField
+     */
     public static double getValueFromTextField(TextField textField, String name) {
         String s = textField.getText();
         double d = 0;
