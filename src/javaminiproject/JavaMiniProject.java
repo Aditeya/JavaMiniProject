@@ -15,12 +15,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
@@ -36,7 +38,6 @@ public class JavaMiniProject extends Application {
         Label distanceLabel = new Label("Distance          (Miles)");
         Label fuelEfficiencyLabel = new Label("Fuel Efficiency (MPG)");
         Label fuelRBLabel = new Label("Fuel");
-        Label resultLabel = new Label("Result");
 
         // TextFields for input
         TextField distanceTF = new TextField();
@@ -62,6 +63,11 @@ public class JavaMiniProject extends Application {
         // RadioButtons and Label added to VBox
         VBox radioButtons = new VBox(fuelRBLabel, octane, diesel);
         radioButtons.setSpacing(5);
+        
+        // result in stored in a scrollPane
+        Text result = new Text("Result");
+        ScrollPane resultBox = new ScrollPane(result);
+        resultBox.setPrefHeight(100);
 
         // GridPane spacing and padding
         GridPane root = new GridPane();
@@ -76,7 +82,7 @@ public class JavaMiniProject extends Application {
         root.add(fuelEfficiencyTF, 1, 1, 1, 1);
         root.add(radioButtons, 1, 2, 1, 1);
         root.add(new Separator(), 0, 3, 3, 1);
-        root.add(resultLabel, 0, 4, 1, 1);
+        root.add(resultBox, 0, 4, 3, 1);
         root.add(new Separator(), 0, 5, 3, 1);
         root.add(buttons, 0, 6, 3, 1);
 
@@ -90,7 +96,7 @@ public class JavaMiniProject extends Application {
             } catch (NullPointerException e) {
             }
 
-            resultLabel.setText("Result");
+            result.setText("Result");
         });
 
         calculate.setOnAction((ActionEvent event) -> {
@@ -121,12 +127,12 @@ public class JavaMiniProject extends Application {
             BigDecimal costBD = distanceBD.multiply(rateBD.divide(efficiencyInMPL, MathContext.DECIMAL32));
 
             DecimalFormat twoDP = new DecimalFormat("#.##");
-            String cost = twoDP.format(costBD.doubleValue());
-            resultLabel.setText("Result"
+
+            result.setText("Result\n"
                     + "\nDistance = " + distance + " miles"
                     + "\nFuel Efficiency = " + efficiency + " MPG"
                     + "\nFuel Rate = " + rate + " £/L"
-                    + "\nTrip Cost = £ " + cost);
+                    + "\nTrip Cost = £ " + twoDP.format(costBD.doubleValue()));
         });
 
         Scene scene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
