@@ -56,8 +56,8 @@ public class JavaMiniProject extends Application {
         buttons.setAlignment(Pos.CENTER_RIGHT);
 
         // RadioButtons and a ToggleGroup
-        RadioButton octane = new RadioButton("98 Octane 1.03 £/L");
-        RadioButton diesel = new RadioButton("Diesel        1.05 £/L");
+        RadioButton octane = new RadioButton("98 Octane");
+        RadioButton diesel = new RadioButton("Diesel");
         ToggleGroup fuelRB = new ToggleGroup();
         fuelRB.getToggles().add(octane);
         fuelRB.getToggles().add(diesel);
@@ -160,10 +160,10 @@ public class JavaMiniProject extends Application {
             RadioButton rb = (RadioButton) toggleGroup.getSelectedToggle();
 
             switch (rb.getText()) {
-                case "98 Octane 1.03 £/L":
+                case "98 Octane":
                     rate = 1.03;
                     break;
-                case "Diesel        1.05 £/L":
+                case "Diesel":
                     rate = 1.05;
                     break;
             }
@@ -210,6 +210,11 @@ public class JavaMiniProject extends Application {
         return d;
     }
 
+    /**
+     * main method
+     * 
+     * @param args not used
+     */
     public static void main(String[] args) {
         launch(args);
     }
