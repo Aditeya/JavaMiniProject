@@ -132,10 +132,10 @@ public class JavaMiniProject extends Application {
             DecimalFormat twoDP = new DecimalFormat("#.##");
 
             result.setText("Result\n"
-                    + "\nDistance = " + distance + " miles"
-                    + "\nFuel Efficiency = " + efficiency + " MPG"
-                    + "\nFuel Rate = " + rate + " £/L"
-                    + "\nTrip Cost = £ " + twoDP.format(costBD.doubleValue()));
+                    + "\nTrip Distance = " + distance + " miles"
+                    + "\nCar's Fuel Efficiency = " + efficiency + " MPG"
+                    + "\nCost of Fuel per litre = " + rate + " £/L"
+                    + "\nFinal Fuel Cost = £ " + twoDP.format(costBD.doubleValue()));
         });
 
         Scene scene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
