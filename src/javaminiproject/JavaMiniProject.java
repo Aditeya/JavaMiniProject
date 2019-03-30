@@ -1,5 +1,9 @@
 package javaminiproject;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
@@ -156,22 +160,25 @@ public class JavaMiniProject extends Application {
     public static double getValueFromRadioButton(ToggleGroup toggleGroup) {
         double rate = 0;
 
-        try {
+        try (BufferedReader fileReader = new BufferedReader(new FileReader("resources/fuelPrices.txt"))) {
             RadioButton rb = (RadioButton) toggleGroup.getSelectedToggle();
 
             switch (rb.getText()) {
                 case "98 Octane":
-                    rate = 1.03;
-                    break;
+                    return Double.parseDouble(fileReader.readLine());
                 case "Diesel":
-                    rate = 1.05;
-                    break;
+                    fileReader.readLine();
+                    return Double.parseDouble(fileReader.readLine());
             }
         } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Please Select a Fuel!", ButtonType.OK);
 
             alert.showAndWait();
             return 0;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
         return rate;
