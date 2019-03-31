@@ -1,8 +1,10 @@
 package javaminiproject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
@@ -29,10 +31,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 /**
- * Fuel Cost Calculator made with JavaFX.
- * Uses fuel price, fuel efficiency and distance 
- * to calculate cost.
- * 
+ * Fuel Cost Calculator made with JavaFX. Uses fuel price, fuel efficiency and
+ * distance to calculate cost.
+ *
  * @author Aditeya Viju Govind
  */
 public class JavaMiniProject extends Application {
@@ -69,7 +70,7 @@ public class JavaMiniProject extends Application {
         // RadioButtons and Label added to VBox
         VBox radioButtons = new VBox(fuelRBLabel, octane, diesel);
         radioButtons.setSpacing(5);
-        
+
         // result in stored in a scrollPane
         Text result = new Text("Result");
         ScrollPane resultBox = new ScrollPane(result);
@@ -134,12 +135,19 @@ public class JavaMiniProject extends Application {
             BigDecimal costBD = distanceBD.multiply(rateBD.divide(efficiencyInMPL, MathContext.DECIMAL32));
 
             DecimalFormat twoDP = new DecimalFormat("#.##");
+            String cost = twoDP.format(costBD.doubleValue());
 
             result.setText("Result\n"
                     + "\nTrip Distance = " + distance + " miles"
                     + "\nCar's Fuel Efficiency = " + efficiency + " MPG"
                     + "\nCost of Fuel per litre = " + rate + " £/L"
-                    + "\nFinal Fuel Cost = £ " + twoDP.format(costBD.doubleValue()));
+                    + "\nFinal Fuel Cost = £ " + cost);
+
+            try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter("resources/fuelCostCalculations.csv", true))) {
+                fileWriter.write(distance + "," + efficiency + "," + rate + "," + cost);
+                fileWriter.newLine();
+            } catch (IOException e) {
+            }
         });
 
         Scene scene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
@@ -151,14 +159,16 @@ public class JavaMiniProject extends Application {
     }
 
     /**
-     * This method is used to get which RadioButton has been selected and return the selected value.
-     * It will show an Alert if a RadioButton isn't selected.
-     * 
+     * This method is used to get which RadioButton has been selected and return
+     * the selected value. It will show an Alert if a RadioButton isn't
+     * selected.
+     *
      * @param toggleGroup the toggle group containing the RadioButtons
-     * @return returns a double as the fuel price or return 0 if a RadioButton isn't selected
+     * @return returns a double as the fuel price or return 0 if a RadioButton
+     * isn't selected
      */
     public static double getValueFromRadioButton(ToggleGroup toggleGroup) {
-        
+
         try (BufferedReader fileReader = new BufferedReader(new FileReader("resources/fuelPrices.txt"))) {
             RadioButton rb = (RadioButton) toggleGroup.getSelectedToggle();
 
@@ -177,14 +187,14 @@ public class JavaMiniProject extends Application {
         } catch (FileNotFoundException e) {
         } catch (IOException e) {
         }
-        
+
         return 0;
     }
 
-     /**
-     * This method is used to get the double value input from a TextField. It displays
-     * an Alert if a double value is not entered.
-     * 
+    /**
+     * This method is used to get the double value input from a TextField. It
+     * displays an Alert if a double value is not entered.
+     *
      * @param textField TextField to get the double value
      * @param name name of the TextField for the Alert
      * @return returns a double value acquired from the TextField
@@ -216,7 +226,7 @@ public class JavaMiniProject extends Application {
 
     /**
      * main method
-     * 
+     *
      * @param args not used
      */
     public static void main(String[] args) {
