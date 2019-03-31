@@ -158,8 +158,7 @@ public class JavaMiniProject extends Application {
      * @return returns a double as the fuel price or return 0 if a RadioButton isn't selected
      */
     public static double getValueFromRadioButton(ToggleGroup toggleGroup) {
-        double rate = 0;
-
+        
         try (BufferedReader fileReader = new BufferedReader(new FileReader("resources/fuelPrices.txt"))) {
             RadioButton rb = (RadioButton) toggleGroup.getSelectedToggle();
 
@@ -176,12 +175,10 @@ public class JavaMiniProject extends Application {
             alert.showAndWait();
             return 0;
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
         }
-
-        return rate;
+        
+        return 0;
     }
 
      /**
