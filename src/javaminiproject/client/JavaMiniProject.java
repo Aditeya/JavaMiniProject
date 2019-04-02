@@ -1,14 +1,15 @@
-package javaminiproject;
+package javaminiproject.client;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.net.Socket;
 import java.text.DecimalFormat;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -169,22 +170,24 @@ public class JavaMiniProject extends Application {
      */
     public static double getValueFromRadioButton(ToggleGroup toggleGroup) {
 
-        try (BufferedReader fileReader = new BufferedReader(new FileReader("resources/fuelPrices.txt"))) {
+        try (Socket server = new Socket("localhost", 2000)) {
             RadioButton rb = (RadioButton) toggleGroup.getSelectedToggle();
-
-            switch (rb.getText()) {
-                case "98 Octane":
-                    return Double.parseDouble(fileReader.readLine());
-                case "Diesel":
-                    fileReader.readLine();
-                    return Double.parseDouble(fileReader.readLine());
+            String s = rb.getText();
+            
+            /*if (s == null) {
+                System.out.println("lol");
+                s.trim();
             }
+*/
+            PrintWriter out = new PrintWriter(server.getOutputStream(), true);
+            BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
+
+            out.println(s);
+            return Double.parseDouble(in.readLine());
+
         } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Please Select a Fuel!", ButtonType.OK);
-
             alert.showAndWait();
-            return 0;
-        } catch (FileNotFoundException e) {
         } catch (IOException e) {
         }
 
