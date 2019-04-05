@@ -1,16 +1,9 @@
 package javaminiproject.client;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.text.DecimalFormat;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -30,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javaminiproject.FuelCalculation;
 
 /**
  * Fuel Cost Calculator made with JavaFX. Uses fuel price, fuel efficiency and
@@ -123,32 +117,23 @@ public class JavaMiniProject extends Application {
                 return;
             }
 
-            double rate = getValueFromRadioButton(fuelRB);
-            if (rate == 0) {
+            String rate = getValueFromRadioButton(fuelRB);
+            if (rate.isEmpty()) {
                 return;
             }
 
-            BigDecimal distanceBD = new BigDecimal(distance);
-            BigDecimal efficiencyBD = new BigDecimal(efficiency);
-            BigDecimal efficiencyInMPL = efficiencyBD.divide(BigDecimal.valueOf(4.54609), 5, RoundingMode.HALF_UP);
-            BigDecimal rateBD = new BigDecimal(rate);
+            FuelCalculation calculation = new FuelCalculation(distance, efficiency, rate);
 
-            BigDecimal costBD = distanceBD.multiply(rateBD.divide(efficiencyInMPL, MathContext.DECIMAL32));
+            try (Socket server = new Socket("localhost", 2000)) {
+                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
 
-            DecimalFormat twoDP = new DecimalFormat("#.##");
-            String cost = twoDP.format(costBD.doubleValue());
-
-            result.setText("Result\n"
-                    + "\nTrip Distance = " + distance + " miles"
-                    + "\nCar's Fuel Efficiency = " + efficiency + " MPG"
-                    + "\nCost of Fuel per litre = " + rate + " £/L"
-                    + "\nFinal Fuel Cost = £ " + cost);
-
-            try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter("resources/fuelCostCalculations.csv", true))) {
-                fileWriter.write(distance + "," + efficiency + "," + rate + "," + cost);
-                fileWriter.newLine();
-            } catch (IOException e) {
+                out.writeObject(calculation);
+                calculation = (FuelCalculation) in.readObject();
+            } catch (IOException | ClassNotFoundException e) {
             }
+
+            result.setText("Result\n\n" + calculation);
         });
 
         Scene scene = new Scene(root, root.getPrefWidth(), root.getPrefHeight());
@@ -161,37 +146,27 @@ public class JavaMiniProject extends Application {
 
     /**
      * This method is used to get which RadioButton has been selected and return
-     * the selected value. It will show an Alert if a RadioButton isn't
-     * selected.
+     * the selected value which is retrieved from a server. It will show an
+     * Alert if a RadioButton isn't selected.
      *
      * @param toggleGroup the toggle group containing the RadioButtons
-     * @return returns a double as the fuel price or return 0 if a RadioButton
-     * isn't selected
+     * @return returns a String as the fuel type or return an empty string if a
+     * RadioButton isn't selected
      */
-    public static double getValueFromRadioButton(ToggleGroup toggleGroup) {
+    public static String getValueFromRadioButton(ToggleGroup toggleGroup) {
 
-        try (Socket server = new Socket("localhost", 2000)) {
+        try {
             RadioButton rb = (RadioButton) toggleGroup.getSelectedToggle();
             String s = rb.getText();
-            
-            /*if (s == null) {
-                System.out.println("lol");
-                s.trim();
-            }
-*/
-            PrintWriter out = new PrintWriter(server.getOutputStream(), true);
-            BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
 
-            out.println(s);
-            return Double.parseDouble(in.readLine());
+            return s;
 
         } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Please Select a Fuel!", ButtonType.OK);
             alert.showAndWait();
-        } catch (IOException e) {
         }
 
-        return 0;
+        return "";
     }
 
     /**
