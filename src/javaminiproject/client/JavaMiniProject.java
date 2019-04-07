@@ -146,8 +146,8 @@ public class JavaMiniProject extends Application {
 
     /**
      * This method is used to get which RadioButton has been selected and return
-     * the selected value which is retrieved from a server. It will show an
-     * Alert if a RadioButton isn't selected.
+     * the selected fuel type as a String. It will show an Alert if a
+     * RadioButton isn't selected.
      *
      * @param toggleGroup the toggle group containing the RadioButtons
      * @return returns a String as the fuel type or return an empty string if a
@@ -157,9 +157,8 @@ public class JavaMiniProject extends Application {
 
         try {
             RadioButton rb = (RadioButton) toggleGroup.getSelectedToggle();
-            String s = rb.getText();
 
-            return s;
+            return rb.getText();
 
         } catch (NullPointerException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "Please Select a Fuel!", ButtonType.OK);

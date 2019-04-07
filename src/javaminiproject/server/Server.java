@@ -16,8 +16,8 @@ import java.text.DecimalFormat;
 import javaminiproject.FuelCalculation;
 
 /**
- * Fuel Cost Calculator Server is used to retrieve the cost of fuel per litre
- * from a file.
+ * Fuel Cost Calculator Server is used to calculate total fuel cost and send
+ * back the given parameters and answer.
  *
  * @author Aditeya Viju Govind
  */
@@ -80,7 +80,8 @@ public class Server {
     }
 
     /**
-     * Reads the Fuel Price from a file and returns it.
+     * Reads the Fuel Price from a file and returns it according to requested
+     * fuel type.
      *
      * @param fuel fuel type to be read
      * @return double value of fuel price of fuel type

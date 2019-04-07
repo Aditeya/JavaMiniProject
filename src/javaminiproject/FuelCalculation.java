@@ -3,7 +3,7 @@ package javaminiproject;
 import java.io.Serializable;
 
 /**
- * Fuel Calculation class used to transfer parameters and answer over the
+ * Fuel Calculation class used to transfer parameters and answer, over the
  * network.
  *
  * @author Aditeya Viju Govind
