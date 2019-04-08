@@ -1,9 +1,8 @@
 package javaminiproject.server;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -13,6 +12,7 @@ import java.math.RoundingMode;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DecimalFormat;
+import javaminiproject.AppendingObjectOutputStream;
 import javaminiproject.FuelCalculation;
 
 /**
@@ -62,9 +62,8 @@ public class Server {
                                     twoDP.format(
                                             costBD.doubleValue())));
 
-                    try (BufferedWriter fileWriter = new BufferedWriter(new FileWriter("resources/fuelCostCalculations.csv", true))) {
-                        fileWriter.write(calculation.toCSV());
-                        fileWriter.newLine();
+                    try (AppendingObjectOutputStream fileWriter = new AppendingObjectOutputStream(new FileOutputStream("resources/fuelCostCalculations.csv", true))) {
+                        fileWriter.writeObject(calculation);
                     } catch (IOException e) {
                     }
 
