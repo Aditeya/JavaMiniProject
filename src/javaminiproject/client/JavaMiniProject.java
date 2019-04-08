@@ -48,10 +48,12 @@ public class JavaMiniProject extends Application {
         // Buttons for calculation and resetting
         Button calculate = new Button("Calculate");
         Button reset = new Button("Reset");
+        Button showAll = new Button("Show All Results");
         reset.setStyle("-fx-base: ee2211;");
+        showAll.setStyle("-fx-base: royalblue;");
 
         // Buttons added to HBox
-        HBox buttons = new HBox(calculate, reset);
+        HBox buttons = new HBox(calculate, reset, showAll);
         buttons.setSpacing(5);
         buttons.setAlignment(Pos.CENTER_RIGHT);
 
