@@ -18,6 +18,12 @@ public class FuelCalculation implements Serializable {
 
     private double totalCost;
 
+    public FuelCalculation() {
+        this.distance = 0;
+        this.efficiency = 0;
+        this.fuelType = null;
+    }
+    
     public FuelCalculation(double distance, double efficiency, String fuelType) {
         this.distance = distance;
         this.efficiency = efficiency;
