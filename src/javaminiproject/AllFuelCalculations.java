@@ -1,35 +1,34 @@
 package javaminiproject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * This class is used to store FuelCalculation objects in an ArrayList
- *
  * @author Aditeya Viju Govind
  */
-public class AllFuelCalculations extends FuelCalculation implements Serializable {
+public class AllFuelCalculations extends FuelCalculation {
 
-    private final List<FuelCalculation> calculations;
+    private final List<FuelCalculation> Calculations;
 
     public AllFuelCalculations() {
-        calculations = new ArrayList<>();
+        Calculations = new ArrayList<>();
     }
 
-    public void add(FuelCalculation fc) {
-        calculations.add(fc);
+    public void add(FuelCalculation fc){
+        Calculations.add(fc);
     }
-
+    
     @Override
     public String toString() {
-        String s = "";
-
-        for (FuelCalculation f : calculations) {
-            s += f + "\n";
+        StringBuilder toString = new StringBuilder();
+        
+        for(FuelCalculation f:Calculations){
+            toString.append(f);
+            toString.append("\n");
         }
-
-        return s;
+        
+        return toString.toString();
     }
 
 }

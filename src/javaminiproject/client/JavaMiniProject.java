@@ -3,7 +3,6 @@ package javaminiproject.client;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.net.Socket;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -24,7 +23,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javaminiproject.AllFuelCalculations;
 import javaminiproject.FuelCalculation;
 
 /**
@@ -105,25 +103,6 @@ public class JavaMiniProject extends Application {
             result.setText("Result");
         });
 
-        showAll.setOnAction((ActionEvent event) -> {
-            reset.fire();
-            AllFuelCalculations calculations = null;
-
-            try (Socket server = new Socket("localhost", 2000)) {
-                PrintWriter command = new PrintWriter(server.getOutputStream(), true);
-                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
-                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-
-                command.println("showAll");
-                calculations = (AllFuelCalculations) in.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            result.setText("All Results\n\n" + calculations.toString());
-
-        });
-
         // Calculation button functionality done with BigDecimal and DecimalFormat
         calculate.setOnAction((ActionEvent event) -> {
             double distance = getValueFromTextField(distanceTF, "distance");
@@ -148,11 +127,8 @@ public class JavaMiniProject extends Application {
             FuelCalculation calculation = new FuelCalculation(distance, efficiency, rate);
 
             try (Socket server = new Socket("localhost", 2000)) {
-                PrintWriter command = new PrintWriter(server.getOutputStream(), true);
                 ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-
-                command.println("calculate");
 
                 out.writeObject(calculation);
                 calculation = (FuelCalculation) in.readObject();
