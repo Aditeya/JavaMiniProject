@@ -18,8 +18,8 @@ import java.util.List;
 import javaminiproject.FuelCalculation;
 
 /**
- * Fuel Cost Calculator Server is used to calculate total fuel cost, send
- * back the given parameters & answer and write it to a file.
+ * Fuel Cost Calculator Server is used to calculate total fuel cost, send back
+ * the given parameters & answer and write it to a file.
  *
  * @author Aditeya Viju Govind
  */
@@ -44,25 +44,7 @@ public class Server {
 
                     //Getting FuelCalculation object and setting fuel price
                     FuelCalculation calculation = (FuelCalculation) in.readObject();
-                    calculation.setFuelPricePerLitre(
-                            setFuelPrice(
-                                    calculation.getFuelType()));
-
-                    // Calculaion of cost
-                    BigDecimal distanceBD = new BigDecimal(calculation.getDistance());
-                    BigDecimal efficiencyBD = new BigDecimal(calculation.getEfficiency());
-                    BigDecimal efficiencyInMPL = efficiencyBD.divide(BigDecimal.valueOf(4.54609), 5, RoundingMode.HALF_UP);
-                    BigDecimal rateBD = new BigDecimal(calculation.getFuelPricePerLitre());
-
-                    BigDecimal costBD = distanceBD.multiply(rateBD.divide(efficiencyInMPL, MathContext.DECIMAL32));
-
-                    // Rounding to 2 decimal places
-                    DecimalFormat twoDP = new DecimalFormat("#.##");
-
-                    calculation.setTotalCost(
-                            Double.parseDouble(
-                                    twoDP.format(
-                                            costBD.doubleValue())));
+                    calculate(calculation);
 
                     writeFuelCalculation(calculation);
                     out.writeObject(calculation);
@@ -102,8 +84,8 @@ public class Server {
 
     /**
      * Writes FuelCalculation Object to file.
-     * 
-     *@param calculation FuelCalculation object to write
+     *
+     * @param calculation FuelCalculation object to write
      */
     public static void writeFuelCalculation(FuelCalculation calculation) {
         List<FuelCalculation> calculations = new ArrayList<>();
@@ -118,5 +100,32 @@ public class Server {
             fileWriter.writeObject(calculations);
         } catch (Exception e) {
         }
+    }
+
+    /**
+     * Calculates cost and sets fuel price.
+     *
+     * @param calculation FuelCalculation object result to be calculated
+     */
+    public static void calculate(FuelCalculation calculation) {
+        calculation.setFuelPricePerLitre(
+                setFuelPrice(
+                        calculation.getFuelType()));
+
+        // Calculaion of cost
+        BigDecimal distanceBD = new BigDecimal(calculation.getDistance());
+        BigDecimal efficiencyBD = new BigDecimal(calculation.getEfficiency());
+        BigDecimal efficiencyInMPL = efficiencyBD.divide(BigDecimal.valueOf(4.54609), 5, RoundingMode.HALF_UP);
+        BigDecimal rateBD = new BigDecimal(calculation.getFuelPricePerLitre());
+
+        BigDecimal costBD = distanceBD.multiply(rateBD.divide(efficiencyInMPL, MathContext.DECIMAL32));
+
+        // Rounding to 2 decimal places
+        DecimalFormat twoDP = new DecimalFormat("#.##");
+
+        calculation.setTotalCost(
+                Double.parseDouble(
+                        twoDP.format(
+                                costBD.doubleValue())));
     }
 }
