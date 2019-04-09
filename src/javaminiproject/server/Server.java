@@ -1,6 +1,7 @@
 package javaminiproject.server;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,12 +13,13 @@ import java.math.RoundingMode;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DecimalFormat;
-import javaminiproject.AppendingObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 import javaminiproject.FuelCalculation;
 
 /**
- * Fuel Cost Calculator Server is used to calculate total fuel cost and send
- * back the given parameters and answer.
+ * Fuel Cost Calculator Server is used to calculate total fuel cost, send
+ * back the given parameters & answer and write it to a file.
  *
  * @author Aditeya Viju Govind
  */
@@ -62,11 +64,7 @@ public class Server {
                                     twoDP.format(
                                             costBD.doubleValue())));
 
-                    try (AppendingObjectOutputStream fileWriter = new AppendingObjectOutputStream(new FileOutputStream("resources/fuelCostCalculations.csv", true))) {
-                        fileWriter.writeObject(calculation);
-                    } catch (IOException e) {
-                    }
-
+                    writeFuelCalculation(calculation);
                     out.writeObject(calculation);
 
                 } catch (IOException | NullPointerException | ClassNotFoundException e) {
@@ -100,5 +98,25 @@ public class Server {
         }
 
         return 0;
+    }
+
+    /**
+     * Writes FuelCalculation Object to file.
+     * 
+     *@param calculation FuelCalculation object to write
+     */
+    public static void writeFuelCalculation(FuelCalculation calculation) {
+        List<FuelCalculation> calculations = new ArrayList<>();
+
+        try (ObjectInputStream fileReader = new ObjectInputStream(new FileInputStream("resources/fuelCostCalculations.csv"))) {
+            calculations = (ArrayList<FuelCalculation>) fileReader.readObject();
+        } catch (Exception e) {
+        }
+
+        try (ObjectOutputStream fileWriter = new ObjectOutputStream(new FileOutputStream("resources/fuelCostCalculations.csv"))) {
+            calculations.add(calculation);
+            fileWriter.writeObject(calculations);
+        } catch (Exception e) {
+        }
     }
 }
