@@ -16,6 +16,7 @@ import java.net.Socket;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import javaminiproject.AllFuelCalculations;
 import javaminiproject.FuelCalculation;
 
 /**
@@ -54,6 +55,7 @@ public class Server {
                             out.writeObject(calculation);
                             break;
                         case "showAll":
+                            out.writeObject(getAllFuelCalculations());
                             break;
                     }
 
@@ -135,5 +137,16 @@ public class Server {
                 Double.parseDouble(
                         twoDP.format(
                                 costBD.doubleValue())));
+    }
+    
+    public static AllFuelCalculations getAllFuelCalculations(){
+        List<FuelCalculation> calculations = new ArrayList<>();
+
+        try (ObjectInputStream fileReader = new ObjectInputStream(new FileInputStream("resources/fuelCostCalculations.csv"))) {
+            calculations = (ArrayList<FuelCalculation>) fileReader.readObject();
+        } catch (Exception e) {
+        }
+        
+        return new AllFuelCalculations(calculations);
     }
 }

@@ -26,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javaminiproject.AllFuelCalculations;
 import javaminiproject.FuelCalculation;
 
 /**
@@ -106,6 +107,23 @@ public class JavaMiniProject extends Application {
             result.setText("Result");
         });
 
+        showAll.setOnAction(((event) -> {
+            try (Socket server = new Socket("localhost", 2000)) {
+                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
+                PrintWriter command = new PrintWriter(server.getOutputStream(), true);
+
+                command.println("showAll");
+
+                AllFuelCalculations calculations = (AllFuelCalculations) in.readObject();
+                
+                result.setText("All Results:\n\n"+calculations);
+            } catch (IOException | ClassNotFoundException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }));
+
         // Calculation button functionality done with BigDecimal and DecimalFormat
         calculate.setOnAction((ActionEvent event) -> {
             double distance = getValueFromTextField(distanceTF, "distance");
@@ -132,8 +150,8 @@ public class JavaMiniProject extends Application {
             try (Socket server = new Socket("localhost", 2000)) {
                 ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(server.getInputStream());
-                PrintWriter command = new PrintWriter(server.getOutputStream());
-                
+                PrintWriter command = new PrintWriter(server.getOutputStream(), true);
+
                 command.println("calculate");
 
                 out.writeObject(calculation);
