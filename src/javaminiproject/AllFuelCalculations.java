@@ -25,12 +25,16 @@ public class AllFuelCalculations extends FuelCalculation {
 
     @Override
     public String toString() {
-        String s = "";
-
+        StringBuilder s = new StringBuilder("");
+        
         for (FuelCalculation f : calculations) {
-            s += f + "\n\n";
+            s.append(f);
+            s.append("\n\n");
         }
-
-        return s;
+        
+        s.deleteCharAt(s.length()-1);
+        s.deleteCharAt(s.length()-1);
+        
+        return s.toString();
     }
 }
