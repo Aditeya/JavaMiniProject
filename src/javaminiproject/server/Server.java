@@ -42,7 +42,7 @@ public class Server {
                     ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
                     ObjectInputStream in = new ObjectInputStream(client.getInputStream());
 
-                    //Getting FuelCalculation object and setting fuel price
+                    //Getting FuelCalculation object and calculate price
                     FuelCalculation calculation = (FuelCalculation) in.readObject();
                     calculate(calculation);
 
