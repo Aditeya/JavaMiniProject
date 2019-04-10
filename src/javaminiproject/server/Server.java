@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.math.BigDecimal;
@@ -41,13 +42,20 @@ public class Server {
 
                     ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
                     ObjectInputStream in = new ObjectInputStream(client.getInputStream());
+                    BufferedReader command = new BufferedReader(new InputStreamReader(client.getInputStream()));
+                    
+                    switch (command.readLine()) {
+                        case "calculate":
+                            //Getting FuelCalculation object and setting fuel price
+                            FuelCalculation calculation = (FuelCalculation) in.readObject();
+                            calculate(calculation);
 
-                    //Getting FuelCalculation object and calculate price
-                    FuelCalculation calculation = (FuelCalculation) in.readObject();
-                    calculate(calculation);
-
-                    writeFuelCalculation(calculation);
-                    out.writeObject(calculation);
+                            writeFuelCalculation(calculation);
+                            out.writeObject(calculation);
+                            break;
+                        case "showAll":
+                            break;
+                    }
 
                 } catch (IOException | NullPointerException | ClassNotFoundException e) {
                 }

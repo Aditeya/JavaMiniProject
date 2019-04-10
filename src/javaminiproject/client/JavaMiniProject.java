@@ -1,8 +1,11 @@
 package javaminiproject.client;
 
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.Socket;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -48,10 +51,12 @@ public class JavaMiniProject extends Application {
         // Buttons for calculation and resetting
         Button calculate = new Button("Calculate");
         Button reset = new Button("Reset");
+        Button showAll = new Button("Show All Results");
         reset.setStyle("-fx-base: ee2211;");
+        showAll.setStyle("-fx-base: royalblue;");
 
         // Buttons added to HBox
-        HBox buttons = new HBox(calculate, reset);
+        HBox buttons = new HBox(calculate, reset, showAll);
         buttons.setSpacing(5);
         buttons.setAlignment(Pos.CENTER_RIGHT);
 
@@ -127,6 +132,9 @@ public class JavaMiniProject extends Application {
             try (Socket server = new Socket("localhost", 2000)) {
                 ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(server.getInputStream());
+                PrintWriter command = new PrintWriter(server.getOutputStream());
+                
+                command.println("calculate");
 
                 out.writeObject(calculation);
                 calculation = (FuelCalculation) in.readObject();
