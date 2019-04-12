@@ -117,8 +117,6 @@ public class JavaMiniProject extends Application {
 
                 result.setText("All Results:\n\n" + calculations);
             } catch (IOException | ClassNotFoundException e) {
-            } catch (Exception e) {
-                e.printStackTrace();
             }
         }));
 
