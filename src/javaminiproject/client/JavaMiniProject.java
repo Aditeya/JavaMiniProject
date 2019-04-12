@@ -1,10 +1,8 @@
 package javaminiproject.client;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.Socket;
 import javafx.application.Application;
@@ -116,8 +114,8 @@ public class JavaMiniProject extends Application {
                 command.println("showAll");
 
                 AllFuelCalculations calculations = (AllFuelCalculations) in.readObject();
-                
-                result.setText("All Results:\n\n"+calculations);
+
+                result.setText("All Results:\n\n" + calculations);
             } catch (IOException | ClassNotFoundException e) {
             } catch (Exception e) {
                 e.printStackTrace();

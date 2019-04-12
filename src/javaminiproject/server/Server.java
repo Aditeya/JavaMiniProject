@@ -44,7 +44,7 @@ public class Server {
                     ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
                     ObjectInputStream in = new ObjectInputStream(client.getInputStream());
                     BufferedReader command = new BufferedReader(new InputStreamReader(client.getInputStream()));
-                    
+
                     switch (command.readLine()) {
                         case "calculate":
                             //Getting FuelCalculation object and setting fuel price
@@ -138,15 +138,21 @@ public class Server {
                         twoDP.format(
                                 costBD.doubleValue())));
     }
-    
-    public static AllFuelCalculations getAllFuelCalculations(){
+
+    /**
+     * Reads fuelCostCalculations.csv and gets ArrayList which is returned in
+     * AllFuelCalculcations Object
+     *
+     * @return AllFuelCalculcations Object
+     */
+    public static AllFuelCalculations getAllFuelCalculations() {
         List<FuelCalculation> calculations = new ArrayList<>();
 
         try (ObjectInputStream fileReader = new ObjectInputStream(new FileInputStream("resources/fuelCostCalculations.csv"))) {
             calculations = (ArrayList<FuelCalculation>) fileReader.readObject();
         } catch (Exception e) {
         }
-        
+
         return new AllFuelCalculations(calculations);
     }
 }
