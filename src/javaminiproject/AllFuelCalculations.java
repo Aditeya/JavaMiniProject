@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This class is used to store FuelCalculation objects in an ArrayList
+ * 
  * @author Aditeya Viju Govind
  */
 public class AllFuelCalculations extends FuelCalculation {
