@@ -20,17 +20,25 @@ import javaminiproject.FuelCalculation;
 
 /**
  * Serves each client sockets request
- * 
+ *
  * @author Aditeya Viju Govind
  */
 public class ServerWorker implements Runnable {
 
     protected Socket client = null;
 
+    /**
+     * ServerWorker constructor to get client socket.
+     *
+     * @param client Socket to be served
+     */
     public ServerWorker(Socket client) {
         this.client = client;
     }
 
+    /**
+     * Method called by Thread which serves client.
+     */
     @Override
     public void run() {
         try (ObjectOutputStream out = new ObjectOutputStream(client.getOutputStream());
@@ -50,10 +58,10 @@ public class ServerWorker implements Runnable {
                     out.writeObject(getAllFuelCalculations());
                     break;
             }
-            
+
         } catch (IOException | ClassNotFoundException e) {
         }
-        
+
         try {
             client.close();
         } catch (IOException ex) {

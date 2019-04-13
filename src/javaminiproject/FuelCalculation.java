@@ -18,12 +18,23 @@ public class FuelCalculation implements Serializable {
 
     private double totalCost;
 
+    /**
+     * Blank FuelCalculation constructor
+     */
     public FuelCalculation() {
         this.distance = 0;
         this.efficiency = 0;
         this.fuelType = null;
     }
 
+    /**
+     * FuelCalculation constructor with required parameters to calculate cost at
+     * server
+     *
+     * @param distance distance vehicle travels in Miles
+     * @param efficiency Efficiency of vehicle in Miles/Gallon
+     * @param fuelType Type of fuel used
+     */
     public FuelCalculation(double distance, double efficiency, String fuelType) {
         this.distance = distance;
         this.efficiency = efficiency;
@@ -61,20 +72,50 @@ public class FuelCalculation implements Serializable {
     }
 
     /**
-     * Used to get the CSV format of the parameters and answer.
+     * Used to get the CSV format of the parameters and answer using
+     * StringBuilder.
      *
      * @return parameters and cost in CSV format
      */
     public String toCSV() {
-        return distance + "," + efficiency + "," + fuelPricePerLitre + "," + totalCost;
+        StringBuilder s = new StringBuilder("");
+
+        s.append(distance);
+        s.append(",");
+        s.append(efficiency);
+        s.append(",");
+        s.append(fuelPricePerLitre);
+        s.append(",");
+        s.append(totalCost);
+
+        return s.toString();
     }
 
+    /**
+     * Gets the parameters and answer of a FuelCalculation using StringBuilder.
+     *
+     * @return String containing parameters and answer 
+     */
     @Override
     public String toString() {
-        return "Trip Distance = " + distance + " miles"
-                + "\nCar's Fuel Efficiency = " + efficiency + " MPG"
-                + "\nCost of Fuel per litre = " + fuelPricePerLitre + " £/L"
-                + "\nFinal Fuel Cost = £ " + totalCost;
+        StringBuilder s = new StringBuilder("");
+
+        s.append("Trip Distance = ");
+        s.append(distance);
+        s.append(" miles");
+
+        s.append("\nCar's Fuel Efficiency = ");
+        s.append(efficiency);
+        s.append(" MPG");
+
+        s.append("\nCost of Fuel per litre = ");
+        s.append(fuelPricePerLitre);
+        s.append(" £/L");
+
+        s.append("\nFinal Fuel Cost = £ ");
+        s.append(totalCost);
+
+        return s.toString();
     }
 
 }
