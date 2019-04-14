@@ -1,6 +1,8 @@
 package javaminiproject.client;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
@@ -24,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import javaminiproject.AllFuelCalculations;
 import javaminiproject.FuelCalculation;
 
@@ -35,8 +38,23 @@ import javaminiproject.FuelCalculation;
  */
 public class JavaMiniProject extends Application {
 
+    int ID;
+
     @Override
     public void start(Stage primaryStage) {
+
+        try (Socket server = new Socket("localhost", 2000)) {
+            ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+            PrintWriter command = new PrintWriter(server.getOutputStream(), true);
+
+            ObjectInputStream in = new ObjectInputStream(server.getInputStream());
+            BufferedReader request = new BufferedReader(new InputStreamReader(server.getInputStream()));
+
+            command.println("clientID");
+            ID = Integer.parseInt(request.readLine());
+
+        } catch (IOException e) {
+        }
 
         // Labels
         Label distanceLabel = new Label("Distance          (Miles)");
@@ -93,7 +111,7 @@ public class JavaMiniProject extends Application {
         root.add(buttons, 0, 6, 3, 1);
 
         // Reset Button functionality
-        reset.setOnAction((event) -> {
+        reset.setOnAction((ActionEvent event) -> {
             distanceTF.clear();
             fuelEfficiencyTF.clear();
 
@@ -105,13 +123,14 @@ public class JavaMiniProject extends Application {
             result.setText("Result");
         });
 
-        showAll.setOnAction(((event) -> {
+        showAll.setOnAction(((ActionEvent event) -> {
             try (Socket server = new Socket("localhost", 2000)) {
                 ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
                 ObjectInputStream in = new ObjectInputStream(server.getInputStream());
                 PrintWriter command = new PrintWriter(server.getOutputStream(), true);
 
                 command.println("showAll");
+                command.println(ID);
 
                 AllFuelCalculations calculations = (AllFuelCalculations) in.readObject();
 
@@ -149,6 +168,7 @@ public class JavaMiniProject extends Application {
                 PrintWriter command = new PrintWriter(server.getOutputStream(), true);
 
                 command.println("calculate");
+                command.println(ID);
 
                 out.writeObject(calculation);
                 calculation = (FuelCalculation) in.readObject();
@@ -162,6 +182,21 @@ public class JavaMiniProject extends Application {
 
         primaryStage.setTitle("Fuel Cost Calculator");
         primaryStage.setResizable(false);
+        
+        primaryStage.setOnCloseRequest((WindowEvent event) -> {
+            try (Socket server = new Socket("localhost", 2000)) {
+                ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
+                PrintWriter command = new PrintWriter(server.getOutputStream(), true);
+
+                ObjectInputStream in = new ObjectInputStream(server.getInputStream());
+                BufferedReader request = new BufferedReader(new InputStreamReader(server.getInputStream()));
+
+                command.println("delete");
+                command.println(ID);
+            } catch (Exception e) {
+            }
+        });
+        
         primaryStage.setScene(scene);
         primaryStage.show();
     }

@@ -12,13 +12,17 @@ import java.net.Socket;
  */
 public class Server {
 
+    
+
     /**
      * Starts Server on port 2000 and serves each user in a thread
      *
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
+            
+        ServerClientID clientID = new ServerClientID();
+        
         System.out.println("----------Fuel Cost Calculator Server----------");
 
         try (ServerSocket server = new ServerSocket(2000)) {
@@ -26,7 +30,7 @@ public class Server {
             while (true) {
                 try {
                     Socket client = server.accept();
-                    Thread thread = new Thread(new ServerWorker(client));
+                    Thread thread = new Thread(new ServerWorker(client, clientID));
                     thread.start();
                 } catch (IOException | NullPointerException e) {
                 }
