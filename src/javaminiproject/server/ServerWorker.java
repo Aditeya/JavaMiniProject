@@ -27,6 +27,7 @@ import javaminiproject.FuelCalculation;
  * Serves each client sockets request
  *
  * @author Aditeya Viju Govind
+ * https://github.com/Aditeya/JavaMiniProject
  */
 public class ServerWorker implements Runnable {
 
@@ -96,7 +97,6 @@ public class ServerWorker implements Runnable {
         try {
             Files.deleteIfExists(f.toPath());
         } catch (IOException ex) {
-            Logger.getLogger(ServerWorker.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 

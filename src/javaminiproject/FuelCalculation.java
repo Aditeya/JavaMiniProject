@@ -7,6 +7,7 @@ import java.io.Serializable;
  * network.
  *
  * @author Aditeya Viju Govind
+ * https://github.com/Aditeya/JavaMiniProject
  */
 public class FuelCalculation implements Serializable {
 

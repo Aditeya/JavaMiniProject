@@ -35,6 +35,7 @@ import javaminiproject.FuelCalculation;
  * distance to calculate cost.
  *
  * @author Aditeya Viju Govind
+ * https://github.com/Aditeya/JavaMiniProject
  */
 public class JavaMiniProject extends Application {
 
@@ -43,6 +44,7 @@ public class JavaMiniProject extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        // Client ID request
         try (Socket server = new Socket("localhost", 2000)) {
             ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
             PrintWriter command = new PrintWriter(server.getOutputStream(), true);
@@ -123,6 +125,7 @@ public class JavaMiniProject extends Application {
             result.setText("Result");
         });
 
+        //Client Show all request
         showAll.setOnAction(((ActionEvent event) -> {
             try (Socket server = new Socket("localhost", 2000)) {
                 ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());
@@ -136,10 +139,10 @@ public class JavaMiniProject extends Application {
 
                 result.setText("All Results:\n\n" + calculations);
             } catch (IOException | ClassNotFoundException e) {
-            }
+            } 
         }));
 
-        // Calculation button functionality done with BigDecimal and DecimalFormat
+        // Client calculation request
         calculate.setOnAction((ActionEvent event) -> {
             double distance = getValueFromTextField(distanceTF, "distance");
 
@@ -183,6 +186,7 @@ public class JavaMiniProject extends Application {
         primaryStage.setTitle("Fuel Cost Calculator");
         primaryStage.setResizable(false);
         
+        //Client delete file request
         primaryStage.setOnCloseRequest((WindowEvent event) -> {
             try (Socket server = new Socket("localhost", 2000)) {
                 ObjectOutputStream out = new ObjectOutputStream(server.getOutputStream());

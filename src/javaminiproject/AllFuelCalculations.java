@@ -7,6 +7,7 @@ import java.util.List;
  * This class is used to store FuelCalculation objects in an ArrayList
  *
  * @author Aditeya Viju Govind
+ * https://github.com/Aditeya/JavaMiniProject
  */
 public class AllFuelCalculations extends FuelCalculation {
 
@@ -53,8 +54,10 @@ public class AllFuelCalculations extends FuelCalculation {
             s.append("\n\n");
         }
 
-        s.deleteCharAt(s.length() - 1);
-        s.deleteCharAt(s.length() - 1);
+        if (s.length() > 3) {
+            s.deleteCharAt(s.length() - 1);
+            s.deleteCharAt(s.length() - 1);
+        }
 
         return s.toString();
     }
